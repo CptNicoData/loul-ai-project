@@ -156,6 +156,36 @@ class AnalyticsService:
             for row in result
         ]
 
+    async def get_brand_distribution(self, active_only: bool = True) -> Dict[str, int]:
+        """Get distribution of vehicles by brand."""
+        query = select(
+            Vehicle.brand,
+            func.count(func.distinct(Vehicle.id)).label('count')
+        ).select_from(Vehicle).join(ParkingSession)
+        
+        if active_only:
+            query = query.where(ParkingSession.exit_time.is_(None))
+        
+        query = query.group_by(Vehicle.brand).order_by(func.count(func.distinct(Vehicle.id)).desc())
+        
+        result = await self.db.execute(query)
+        return {row.brand: row.count for row in result if row.brand}
+
+    async def get_floor_distribution(self, active_only: bool = True) -> Dict[int, int]:
+        """Get distribution of vehicles by floor."""
+        query = select(
+            ParkingSpot.floor,
+            func.count(ParkingSession.id).label('count')
+        ).select_from(ParkingSession).join(ParkingSpot)
+        
+        if active_only:
+            query = query.where(ParkingSession.exit_time.is_(None))
+        
+        query = query.group_by(ParkingSpot.floor).order_by(ParkingSpot.floor)
+        
+        result = await self.db.execute(query)
+        return {row.floor: row.count for row in result}
+
     async def get_parking_analytics(self) -> Dict:
         # Current occupancy
         current_vehicles = await self.get_current_vehicle_count()

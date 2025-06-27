@@ -69,6 +69,18 @@ class DirectParkingAssistant:
         
         return result
     
+    async def get_brand_distribution(self) -> dict:
+        """Get distribution of vehicles by brand."""
+        async with AsyncSessionLocal() as db:
+            analytics = AnalyticsService(db)
+            return await analytics.get_brand_distribution(active_only=True)
+    
+    async def get_floor_distribution(self) -> dict:
+        """Get distribution of vehicles by floor."""
+        async with AsyncSessionLocal() as db:
+            analytics = AnalyticsService(db)
+            return await analytics.get_floor_distribution(active_only=True)
+    
     async def process_query(self, query: str) -> str:
         """Process a user query directly."""
         query_lower = query.lower()
@@ -124,6 +136,36 @@ class DirectParkingAssistant:
 - Occupied spots: {status['occupied_spots']}
 - Occupancy rate: {status['occupancy_percentage']:.1f}%"""
             
+            # Handle brand distribution/repartition
+            if 'brand' in query_lower and ('distribution' in query_lower or 'repartition' in query_lower):
+                brands = await self.get_brand_distribution()
+                total = await self.get_current_count()
+                
+                if not brands:
+                    return "There are no vehicles currently in the parking."
+                
+                response = f"Current brand distribution (total {total} vehicles):\n"
+                for brand, count in brands.items():
+                    percentage = (count / total * 100) if total > 0 else 0
+                    response += f"- {brand}: {count} vehicles ({percentage:.1f}%)\n"
+                
+                return response
+            
+            # Handle floor distribution/repartition
+            if 'floor' in query_lower and ('distribution' in query_lower or 'repartition' in query_lower):
+                floors = await self.get_floor_distribution()
+                total = await self.get_current_count()
+                
+                if not floors:
+                    return "There are no vehicles currently in the parking."
+                
+                response = f"Current floor distribution (total {total} vehicles):\n"
+                for floor, count in sorted(floors.items()):
+                    percentage = (count / total * 100) if total > 0 else 0
+                    response += f"- Floor {floor}: {count} vehicles ({percentage:.1f}%)\n"
+                
+                return response
+            
             # Handle color distribution/repartition
             if 'color' in query_lower and ('distribution' in query_lower or 'repartition' in query_lower):
                 colors = await self.get_all_colors()
@@ -144,6 +186,8 @@ class DirectParkingAssistant:
 - How many cars are currently parked?
 - How many [color] cars are in the parking?
 - What's the color distribution?
+- What's the brand distribution?
+- What's the floor distribution?
 - What's the revenue from the last [N] hours?
 - What's the parking status?
 

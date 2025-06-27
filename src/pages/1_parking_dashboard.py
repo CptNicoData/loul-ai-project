@@ -52,9 +52,17 @@ async def register_exit(exit_data):
 # Get current status
 status = asyncio.run(get_parking_status())
 analytics = asyncio.run(get_analytics())
+active_sessions = asyncio.run(get_active_sessions())
+
+# Calculate potential revenue
+current_time = datetime.utcnow()
+potential_revenue = sum([
+    max(1.0, (current_time - s.entry_time).total_seconds() / 3600) * s.hourly_rate
+    for s in active_sessions
+]) if active_sessions else 0
 
 # Main dashboard metrics
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     st.metric(
@@ -82,6 +90,14 @@ with col4:
         "Today's Revenue",
         f"${analytics['today_revenue']:.2f}",
         delta=f"{analytics['today_vehicles']} vehicles"
+    )
+
+with col5:
+    st.metric(
+        "Potential Revenue",
+        f"${potential_revenue:.2f}",
+        delta=f"{len(active_sessions)} active",
+        help="Revenue if all current vehicles exit now"
     )
 
 # Tabs for different functions
@@ -144,6 +160,8 @@ with tab2:
     sessions = asyncio.run(get_active_sessions())
     
     if sessions:
+        # Calculate potential revenue for each session
+        current_time = datetime.utcnow()
         df_sessions = pd.DataFrame([
             {
                 "License Plate": s.vehicle.license_plate,
@@ -152,12 +170,23 @@ with tab2:
                 "Spot": s.parking_spot.spot_number,
                 "Floor": s.parking_spot.floor,
                 "Entry Time": s.entry_time.strftime("%Y-%m-%d %H:%M"),
-                "Duration (hours)": round((datetime.utcnow() - s.entry_time).total_seconds() / 3600, 2)
+                "Duration (hours)": round((current_time - s.entry_time).total_seconds() / 3600, 2),
+                "Potential Revenue": f"${max(1.0, (current_time - s.entry_time).total_seconds() / 3600) * s.hourly_rate:.2f}"
             }
             for s in sessions
         ])
         
-        st.dataframe(df_sessions, use_container_width=True)
+        # Calculate total potential revenue
+        total_potential = sum([
+            max(1.0, (current_time - s.entry_time).total_seconds() / 3600) * s.hourly_rate
+            for s in sessions
+        ])
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.dataframe(df_sessions, use_container_width=True)
+        with col2:
+            st.metric("💰 Total Potential Revenue", f"${total_potential:.2f}")
     else:
         st.info("No vehicles currently parked")
 
