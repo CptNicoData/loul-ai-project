@@ -1,175 +1,178 @@
+# 🚗 Parking Management System with AI Agent
 
-<img src="./assets/icon.svg" width="200" />
-<h1>Generative AI Project Template</h1>
+A web application built with Python 3.12 that manages a parking system lifecycle and includes an AI conversational agent for querying parking data.
 
+## Features
 
-[![python](https://img.shields.io/badge/python-3.11+-blue?logo=python)](https://www.python.org/downloads/release/python-3110/)
-[![Debian](https://img.shields.io/badge/Debian-A81D33?logo=debian&logoColor=fff)](https://www.debian.org/)
-[![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=F0F0F0)](#)
+### Core Functionalities
+- **Vehicle Entry/Exit Management**: Track vehicles with timestamps and automatic spot assignment
+- **Payment Calculation**: Automatic fee calculation based on parking duration
+- **Real-time Status**: Monitor parking occupancy and availability
+- **Multi-floor Support**: Manage parking spots across multiple floors with different spot types (regular, disabled, VIP)
 
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-FFD21E?logo=huggingface&logoColor=000)](#)
-[![OpenAI](https://img.shields.io/badge/OpenAI-%23412991?logo=openai&logoColor=white)](https://pytorch.org/get-started/locally/)
-[![Microsoft Azure](https://custom-icon-badges.demolab.com/badge/Microsoft%20Azure-0089D6?logo=msazure&logoColor=white)](#)
+### AI Conversational Agent
+The AI-powered chatbot can answer queries like:
+- "How many blue cars are currently in the parking?"
+- "How much money have we generated in the last hour?"
+- "How many cars are currently parked?"
+- "What's the average daily number of cars using the parking?"
+- "What's the average daily spending per user?"
+- "What's the average parking duration for black cars?"
 
-[![streamlit](https://img.shields.io/badge/-Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)](#)
-[![FastAPI](https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white)](#)
+## Technology Stack
 
-[![Style: Ruff](https://img.shields.io/badge/style-ruff-41B5BE?style=flat)](https://github.com/charliermarsh/ruff)
-[![MkDocs](https://img.shields.io/badge/MkDocs-526CFE?logo=materialformkdocs&logoColor=fff)](#)
-[![mkdocs-material](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/juftin/mkdocs-material/66d65cf/src/templates/assets/images/badge.json)]()
-[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](#)
-[![GitLab CI](https://img.shields.io/badge/GitLab%20CI-FC6D26?logo=gitlab&logoColor=fff)](#)
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)](#)
+- **Python 3.12**
+- **Streamlit** - Web framework for the dashboard
+- **FastAPI** - Backend API server
+- **CrewAI** - AI agent system for natural language queries
+- **LiteLLM** - Unified interface for multiple LLM providers
+- **SQLAlchemy** - Database ORM with async support
+- **Pydantic** - Data validation
+- **Docker** - Containerization
 
-Template for a new AI Cloud project.
+## Installation
 
-Click on [<kbd>Use this template</kbd>](https://github.com/aminedjeghri/ai-cloud-project-template/generate) to start your own project!
+### Prerequisites
+- Python 3.12
+- Docker (optional, for containerized deployment)
 
-<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png" width="400" />
+### Quick Start
 
-This project is a generative ai template. It contains the following features: LLMs, information extraction, chat, rag & evaluation.
-It uses LLMs(local or cloud),streamlit (with and without fastapi) & Promptfoo as an evaluation and redteam framework for your AI system.
-
-| Test embeddings                                       | Test chat                                            |
-|-------------------------------------------------------|------------------------------------------------------|
-| <img src="./assets/embeddings_img.png" width="500" /> | <img src="./assets/streamlit_img.png" width="500" /> |
-
-**Engineering tools:**
-
-- [x] Use UV to manage packages
-- [x] pre-commit hooks: use ``ruff`` to ensure the code quality & ``detect-secrets`` to scan the secrets in the code.
-- [x] Logging using loguru (with colors)
-- [x] Pytest for unit tests
-- [x] Dockerized project (Dockerfile & docker-compose).
-- [x] Streamlit (frontend) & FastAPI (backend)
-- [x] Make commands to handle everything for you: install, run, test
-
-**AI tools:**
-
-- [x] LLM running locally with Ollama or  in the cloud with any LLM provider (LiteLLM)
-- [x] Information extraction and Question answering from documents
-- [x] Chat to test the AI system
-- [x] Efficient async code using asyncio.
-- [x] AI Evaluation framework: using Promptfoo, Ragas & more...
-
-**CI/CD & Maintenance tools:**
-
-- [x] CI/CD pipelines: ``.github/workflows`` for GitHub (Testing the AI system, local models with Ollama and the dockerized app)
-- [x] Local CI/CD pipelines: GitHub Actions using ``github act``
-- [x] GitHub Actions for deploying to GitHub Pages with mkdocs gh-deploy
-- [x] Dependabot ``.github/dependabot.yml`` for automatic dependency and security updates
-
-**Documentation tools:**
-
-- [x] Wiki creation and setup of documentation website using Mkdocs
-- [x] GitHub Pages deployment using mkdocs gh-deploy plugin
-
-
-Upcoming features:
-- [ ] add RAG again
-- [ ] optimize caching in CI/CD
-- [ ] [Pull requests templates](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/creating-a-pull-request-template-for-your-repository)
-- [ ] Additional MLOps templates: https://github.com/fmind/mlops-python-package
-- [ ] Add MLFlow
-- [ ] add Langfuse
-
-
-## 1. Getting started
-This project contains two parts:
-
-- The AI app: contains an AI system (local or cloud), a frontend (streamlit), with an optional backend(fastapi).
-- (optional)The Evaluation Tool: The evaluation tool is used to evaluate the performance and safety of the AI system. It uses promptfoo & RAGAS, Python 3.11 and NVM are needed, but no need to install them by yourself since the project will handle that for you.
-
-The following files are used in the contribution pipeline:
-
-- ``.env.example``: example of the .env file.
-- ``.env`` : contains the environment variables used by the app.
-- ``Makefile``: contains the commands to run the app locally.
-- ``Dockerfile``: the dockerfile used to build the project inside a container. It uses the Makefile commands to run the app.
-- ``.pre-commit-config.yaml``: pre-commit hooks configuration file
-- ``pyproject.toml``: contains the pytest, ruff & other configurations.
-- ``src/api/log_config.py`` and ``src/main_backend.py``: uvicorn (fastapi) logging configuration.
-- ``src/utils.py``: logger (using logguru) and settings using pydantic.
-  the frontend.
-- `.github/workflows/**.yml`: GitHub actions configuration files.
-- `.gitlab-ci.yml`: Gitlab CI configuration files.
-- ``.gitignore``: contains the files to ignore in the project.
-
-Tree:
-
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd parking-management-system
 ```
 
-├── .env.example # example of the .env file
-├── .env # contains the environment variables
-├── Dockerfile # the dockerfile used to build the project inside a container. It uses the Makefile commands to run the app.
-├── docker-compose.yml # docker-compose configuration file (used to run the frontend and backend in docker)
-├── Makefile # contains the commands to run the app (like running the frontend, tests, installing packages, docker...)
-├── assets
-├── pyproject.toml # uv, dependencies, pytest, ruff & other configurations for the package
-├── uv.lock # uv lock file
-├── .pre-commit-config.yaml # pre-commit hooks configuration file
-├── .gitignore # contains the files to ignore in the project
-├── .github
-│   ├── dependabot.yml # dependabot configuration file
-│   └── workflows # GitHub actions configuration files
-│       └── test-deploy.yaml
-├── mkdocs.yml # mkdocs configuration file
-├── scripts
-│   └── gen_doc_stubs.py # mkdocs : generate documentation stubs
-├── src
-│   ├── api
-│   ├── evaluation
-│   ├── main_backend.py
-│   ├── main_frontend.py
-│   ├── ml
-│   ├── settings.py
-│   └── utils.py # logger (using logguru) and settings using pydantic.
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── README.md
-├── LICENSE
-└── tests
+2. **Create environment file**
+```bash
+cp .env.example .env
 ```
 
+3. **Install dependencies**
+```bash
+make install-prod
+```
 
+4. **Run the application**
 
-### 1.1. Local Prerequisites
+Option A: With local LLM (Ollama)
+```bash
+# Install and start Ollama
+make install-ollama
+make run-ollama
 
-- Ubuntu 22.04 or MacOS
-- git clone the repository
-- UV & Python 3.11 (will be installed by the Makefile)
-- Create a ``.env`` file *(take a look at the ``.env.example`` file)*
+# Download the model
+make download-ollama-model
 
+# Run the application
+make run-app
+```
 
-### 1.2 ⚙️ Steps for Installation (Users)
-#### App (AI, FastAPI, Streamlit)
-You can run the app in a docker container or locally.
-#### Docker:
-- The `docker-compose.yml` file is used to run the app in a docker container. It will install the following services: frontend, backend and ollama. Your can comment out ollama if you don't need it.
-- The `docker-compose.yml` will use the `.env.example.docker` file to configure the environment variables. Per default, it uses ollama docker container.
-- Run this command : `make docker-compose` then go to [http://localhost:8501](http://localhost:8501)
+Option B: With OpenAI or other providers
+```bash
+# Edit .env file and set:
+# OPENAI_API_KEY=your-api-key
+# OPENAI_MODEL_NAME=gpt-3.5-turbo
 
-#### Local :
-1. To install the app, run `make install-prod`.
-2. Choose one of the following options:
-   - **Local model**: we use Ollama and litellm to run local models. The default model is `qwen2.5:0.5b` which is a very lightweight model but can be changed.
-     - Create a ``.env`` file *(You can copy and paste the ``.env.example`` file with `cp .env.example .env`)*
-     - Install Ollama (for openai) `make install-ollama`
-     - Download the model, run `make download-ollama-model`. It will download the model present in the `OLLAMA_MODEL_NAME` var in the ``.env`` file (default is `qwen2.5:0.5b`).
-     - Run ollama to emulate openai : `make run-ollama`
-     - Run `make test-ollama`. You should see an output with a response.
-     - Discuss with the model : `make chat-ollama`
-   - **Cloud model:**
-     - Create/update the ``.env`` file *(You can copy and paste the ``.env.example`` file with `cp .env.example .env`)*
-     - Follow the litellm [naming convention](https://docs.litellm.ai/docs/providers).
+# Run the application
+make run-app
+```
 
-3. Run `make test-inference-llm` to check if your LLM responds.
-4. Run the app:
-- To run the app with Streamlit (and without fastapi), run `make run-frontend`
-- To run the app with both Streamlit and FastAPI, run `make run-app`
+5. **Access the application**
+- Streamlit UI: http://localhost:8501
+- FastAPI docs: http://localhost:8080/docs
 
-### 1.3 ⚙️ Steps for Installation (Contributors and maintainers)
-Check the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+## Docker Deployment
 
-## 2. Contributing
-Check the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+### Using Docker Compose (Recommended)
+```bash
+docker-compose up
+```
+
+This will start:
+- Parking management system (Streamlit + FastAPI)
+- Ollama for local LLM support
+
+### Building Docker Image
+```bash
+docker build -t parking-management-system .
+docker run -p 8501:8501 -p 8080:8080 parking-management-system
+```
+
+## Usage
+
+### 1. Parking Dashboard
+Navigate to the Parking Dashboard to:
+- Register vehicle entries with license plate, color, and brand
+- Process vehicle exits and calculate payments
+- View real-time parking status
+- Monitor floor-wise occupancy
+
+### 2. AI Assistant
+Use the AI Assistant to:
+- Ask natural language questions about parking data
+- Get insights on revenue and occupancy
+- Query vehicle statistics by color or brand
+- Analyze parking patterns
+
+### 3. API Endpoints
+The FastAPI backend provides REST endpoints:
+- `POST /api/parking/entry` - Register vehicle entry
+- `POST /api/parking/exit` - Process vehicle exit
+- `GET /api/parking/status` - Get parking status
+- `GET /api/parking/analytics/*` - Various analytics endpoints
+
+## Configuration
+
+### Environment Variables
+Key configuration options in `.env`:
+- `DEV_MODE` - Enable debug logging
+- `DATABASE_URL` - Database connection string
+- `OPENAI_API_KEY` - LLM provider API key
+- `OPENAI_MODEL_NAME` - Model to use (e.g., gpt-3.5-turbo, ollama/qwen2.5)
+- `HOURLY_RATE` - Parking fee per hour
+
+### Database
+The system uses SQLite by default. For production, configure PostgreSQL:
+```
+DATABASE_URL=postgresql://user:password@host:port/dbname
+ASYNC_DATABASE_URL=postgresql+asyncpg://user:password@host:port/dbname
+```
+
+## Architecture
+
+### Components
+1. **Frontend (Streamlit)**: User interface for parking operations and AI chat
+2. **Backend (FastAPI)**: REST API for parking management
+3. **Database (SQLAlchemy)**: Data persistence with async support
+4. **AI Agent (CrewAI)**: Natural language processing for queries using AI agents with tools
+5. **Services Layer**: Business logic for parking operations and analytics
+
+### Data Models
+- **Vehicle**: Stores vehicle information (license plate, color, brand)
+- **ParkingSpot**: Represents individual parking spaces
+- **ParkingSession**: Tracks vehicle entry/exit and payments
+
+## Development
+
+### Running Tests
+```bash
+make test
+```
+
+### Code Quality
+```bash
+make pre-commit  # Run linting and formatting
+```
+
+### Adding New Features
+1. Add models in `src/database/models.py`
+2. Create Pydantic schemas in `src/schemas/`
+3. Implement business logic in `src/services/`
+4. Add API endpoints in `src/api/routers/`
+5. Create UI components in `src/pages/`
+
+## License
+
+This project is created for educational purposes as part of a technical assessment.

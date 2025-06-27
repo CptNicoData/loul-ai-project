@@ -11,11 +11,12 @@ from fastapi.responses import JSONResponse
 from utils import logger, settings
 
 from api.api_route import router, TagEnum
+from api.routers.parking import router as parking_router
 
-app = FastAPI()
+app = FastAPI(title="Parking Management System API", version="1.0.0")
 
 # ROUTERS
-routers = [router]
+routers = [router, parking_router]
 for router in routers:
     app.include_router(router)
 

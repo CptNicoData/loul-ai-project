@@ -2,8 +2,12 @@ import uvicorn
 
 from api.log_config import LOGGING_CONFIG
 from utils import logger, settings
+from database.database import init_db
 
 if __name__ == "__main__":
+    # Initialize database
+    init_db()
+    logger.info("Database initialized")
     if settings.DEV_MODE:
         logger.info("Running app in DEV mode")
         reload = True
