@@ -12,7 +12,7 @@ dependencies = [
     "langchain==0.2.11",
     "langchain-openai==0.1.20",
     # Database
-    "sqlalchemy==2.0.36",
+    "sqlalchemy==2.0.41",
     "alembic==1.14.0",
     "aiosqlite==0.20.0",
     # backend & frontend
